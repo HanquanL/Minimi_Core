@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class FileService {
+
     @Autowired
     private FileRepository fileRepository;
 
@@ -22,6 +23,11 @@ public class FileService {
     }
 
     public File saveFile(File file) {
+        return fileRepository.save(file);
+    }
+
+    public File updateFile(Long id, File file) {
+        file.setId(id);
         return fileRepository.save(file);
     }
 

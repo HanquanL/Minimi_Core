@@ -26,6 +26,11 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
+    public Note updateNote(Long id, Note note) {
+        note.setId(id);
+        return noteRepository.save(note);
+    }
+
     public void deleteNote(Long id) {
         noteRepository.deleteById(id);
     }

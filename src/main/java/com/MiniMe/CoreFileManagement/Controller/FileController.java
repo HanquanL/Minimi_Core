@@ -3,15 +3,16 @@ package com.MiniMe.CoreFileManagement.Controller;
 import com.MiniMe.CoreFileManagement.Entity.File;
 import com.MiniMe.CoreFileManagement.Service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/files")
 public class FileController {
+
     @Autowired
     private FileService fileService;
 
@@ -22,13 +23,17 @@ public class FileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<File> getFileById(@PathVariable Long id) {
-        Optional<File> file = fileService.getFileById(id);
-        return file.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(fileService.getFileById(id).orElseThrow());
     }
 
     @PostMapping
-    public File saveFile(@RequestBody File file) {
-        return fileService.saveFile(file);
+    public ResponseEntity<File> saveFile(@RequestBody File file) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(fileService.saveFile(file));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<File> updateFile(@PathVariable Long id, @RequestBody File file) {
+        return ResponseEntity.ok(fileService.updateFile(id, file));
     }
 
     @DeleteMapping("/{id}")
