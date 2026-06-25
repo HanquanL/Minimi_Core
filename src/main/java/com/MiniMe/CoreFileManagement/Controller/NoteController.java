@@ -3,15 +3,16 @@ package com.MiniMe.CoreFileManagement.Controller;
 import com.MiniMe.CoreFileManagement.Entity.Note;
 import com.MiniMe.CoreFileManagement.Service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/notes")
 public class NoteController {
+
     @Autowired
     private NoteService noteService;
 
@@ -22,13 +23,17 @@ public class NoteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
-        Optional<Note> note = noteService.getNoteById(id);
-        return note.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(noteService.getNoteById(id).orElseThrow());
     }
 
     @PostMapping
-    public Note saveNote(@RequestBody Note note) {
-        return noteService.saveNote(note);
+    public ResponseEntity<Note> saveNote(@RequestBody Note note) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteService.saveNote(note));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Note> updateNote(@PathVariable Long id, @RequestBody Note note) {
+        return ResponseEntity.ok(noteService.updateNote(id, note));
     }
 
     @DeleteMapping("/{id}")
