@@ -1,7 +1,7 @@
 package com.MiniMe.CoreFileManagement.Controller;
 
-import com.MiniMe.CoreFileManagement.Entity.File;
-import com.MiniMe.CoreFileManagement.Service.FileService;
+import com.MiniMe.CoreFileManagement.Entity.Note;
+import com.MiniMe.CoreFileManagement.Service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,27 +13,27 @@ import java.util.Optional;
 @RequestMapping("/api/notes")
 public class NoteController {
     @Autowired
-    private FileService fileService;
+    private NoteService noteService;
 
     @GetMapping
-    public List<File> getAllFiles() {
-        return fileService.getAllFiles();
+    public List<Note> getAllNotes() {
+        return noteService.getAllNotes();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<File> getFileById(@PathVariable Long id) {
-        Optional<File> file = fileService.getFileById(id);
-        return file.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
+        Optional<Note> note = noteService.getNoteById(id);
+        return note.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public File saveFile(@RequestBody File file) {
-        return fileService.saveFile(file);
+    public Note saveNote(@RequestBody Note note) {
+        return noteService.saveNote(note);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFile(@PathVariable Long id) {
-        fileService.deleteFile(id);
+    public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
+        noteService.deleteNote(id);
         return ResponseEntity.noContent().build();
     }
 }
